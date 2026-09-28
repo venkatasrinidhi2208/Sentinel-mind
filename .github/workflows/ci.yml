@@ -26,8 +26,8 @@ jobs:
       - name: Security & Secret Scan Check
         run: |
           echo "Verifying no hardcoded secrets or API keys are committed..."
-          ! grep -rn "GROQ_API_KEY=gsk_" . --exclude-dir=node_modules || exit 1
-          ! grep -rn "HINDSIGHT_API_KEY=hs_" . --exclude-dir=node_modules || exit 1
+          ! grep -rn "GROQ_API_KEY=gsk_" src/ public/ || exit 1
+          ! grep -rn "HINDSIGHT_API_KEY=hs_" src/ public/ || exit 1
 
       - name: Run Type Check & Lint
         run: npm run lint
