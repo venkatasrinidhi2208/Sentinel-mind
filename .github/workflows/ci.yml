@@ -1,0 +1,39 @@
+name: SentinelMind CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, sri, shreyas, gowri, aashrith ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Security & Secret Scan Check
+        run: |
+          echo "Verifying no hardcoded secrets or API keys are committed..."
+          ! grep -rn "GROQ_API_KEY=gsk_" . --exclude-dir=node_modules || exit 1
+          ! grep -rn "HINDSIGHT_API_KEY=hs_" . --exclude-dir=node_modules || exit 1
+
+      - name: Run Type Check & Lint
+        run: npm run lint
+
+      - name: Run Unified Test Suite
+        run: npm test
+
+      - name: Build Production Distribution
+        run: npm run build
