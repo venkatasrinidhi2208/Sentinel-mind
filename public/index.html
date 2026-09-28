@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SentinelMind — Autonomous SRE & Incident Remediation Agent</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header Navbar -->
+  <header class="navbar">
+    <div class="nav-brand">
+      <div class="logo-icon">🛡️</div>
+      <div>
+        <span class="logo-title">SENTINEL-MIND</span>
+        <span class="logo-tag">AUTONOMOUS SRE AGENT WITH HINDSIGHT MEMORY</span>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <div class="status-indicator">
+        <span class="pulse-dot green" id="globalHealthDot"></span>
+        <span id="globalHealthText">SYSTEM OPERATIONAL</span>
+      </div>
+      <button class="btn btn-outline" id="refreshBtn">🔄 Refresh Telemetry</button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+    <!-- Hero / Problem Banner -->
+    <section class="banner shadow-card">
+      <div class="banner-content">
+        <h2>Autonomous Incident Remediation Powered by Hindsight Memory</h2>
+        <p>SentinelMind continuously monitors production microservices, captures error signatures, and queries historical incident memory to execute verified runbooks in seconds.</p>
+      </div>
+      <div class="banner-badge">
+        <span class="badge badge-purple">Hindsight Memory Engine v1.0</span>
+      </div>
+    </section>
+
+    <!-- Chaos Simulator Control Panel -->
+    <section class="section">
+      <div class="section-header">
+        <h3>⚡ Chaos Engineering Controls</h3>
+        <p>Trigger simulated production incidents to observe SentinelMind's memory-driven diagnostic workflow.</p>
+      </div>
+      <div class="chaos-grid">
+        <button class="chaos-card" data-scenario="db_connection_leak">
+          <div class="chaos-icon">🐘</div>
+          <div class="chaos-info">
+            <h4>DB Connection Leak</h4>
+            <p>PostgreSQL Connection Pool Exhaustion</p>
+          </div>
+          <span class="btn-chaos">Inject Outage</span>
+        </button>
+        <button class="chaos-card" data-scenario="redis_oom">
+          <div class="chaos-icon">⚡</div>
+          <div class="chaos-info">
+            <h4>Redis Memory OOM</h4>
+            <p>Session Cache MaxMemory Exceeded</p>
+          </div>
+          <span class="btn-chaos">Inject Outage</span>
+        </button>
+        <button class="chaos-card" data-scenario="payment_timeout">
+          <div class="chaos-icon">💳</div>
+          <div class="chaos-info">
+            <h4>Payment 504 Timeout</h4>
+            <p>Webhook Connection Deadlock</p>
+          </div>
+          <span class="btn-chaos">Inject Outage</span>
+        </button>
+        <button class="chaos-card" data-scenario="auth_latency">
+          <div class="chaos-icon">🔐</div>
+          <div class="chaos-info">
+            <h4>Auth API Degradation</h4>
+            <p>High Latency > 4500ms</p>
+          </div>
+          <span class="btn-chaos">Inject Outage</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Service Health Grid -->
+    <section class="section">
+      <div class="section-header">
+        <h3>📊 Monitored Infrastructure Telemetry</h3>
+        <p>Real-time health indicators across microservices</p>
+      </div>
+      <div class="service-grid" id="serviceGrid">
+        <!-- Rendered dynamically -->
+        <div class="loading-spinner">Loading microservice telemetry...</div>
+      </div>
+    </section>
+
+    <!-- Active Incident Workspace -->
+    <section class="section grid-two-col">
+      <!-- Left Column: Diagnostic & Remediation Terminal -->
+      <div class="card shadow-card">
+        <div class="card-header">
+          <h3>🚨 Active Incident Workspace</h3>
+          <span class="badge badge-gray" id="activeIncidentCount">0 Active</span>
+        </div>
+        <div id="incidentWorkspace">
+          <div class="empty-state">
+            <div class="empty-icon">✅</div>
+            <h4>No Active Incidents</h4>
+            <p>All microservices are operating normally. Click a Chaos Control above to simulate an outage.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Hindsight Memory Recall & Intelligence -->
+      <div class="card shadow-card">
+        <div class="card-header">
+          <h3>🧠 Hindsight Memory Recall Bank</h3>
+          <div class="toggle-switch">
+            <label>
+              <input type="checkbox" id="modeToggle" checked />
+              <span class="toggle-label">Enable Hindsight Memory</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Before / After Mode Switcher Banner -->
+        <div class="mode-banner" id="modeBanner">
+          <span class="mode-icon">⚡</span>
+          <div>
+            <strong>Mode: Hindsight Memory Enabled</strong>
+            <p id="modeDesc">Agent uses past incident memory bank to retrieve exact root causes & verified runbooks.</p>
+          </div>
+        </div>
+
+        <div id="memoryContainer">
+          <div class="memory-card-list" id="memoryList">
+            <!-- Memory cards rendered here -->
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>SentinelMind Team Development — Sri (Backend) • Shreyas (Frontend) • Gowri (AI Engine) • Aashrith (DevOps/Security)</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
