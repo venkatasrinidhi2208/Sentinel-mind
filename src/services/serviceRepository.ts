@@ -12,7 +12,7 @@ class ServiceRepository {
     this.seedDefaultServices();
   }
 
-  private seedDefaultServices(): void {
+  public seedDefaultServices(): void {
     const initialServices: Microservice[] = [
       {
         id: 'srv-user-api',
@@ -88,6 +88,10 @@ class ServiceRepository {
     };
     this.services.set(id, updated);
     return updated;
+  }
+
+  public resetAllServicesToHealthy(): void {
+    this.seedDefaultServices();
   }
 
   public getHealthReport(): ServiceHealthReport {

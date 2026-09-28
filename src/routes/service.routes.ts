@@ -5,12 +5,22 @@
 
 import { Router, Request, Response } from 'express';
 import { serviceRepository } from '../services/serviceRepository';
+import { incidentRepository } from '../services/incidentRepository';
 
 const router = Router();
 
 router.get('/', (req: Request, res: Response) => {
   const report = serviceRepository.getHealthReport();
   res.json(report);
+});
+
+router.post('/heal-all', (req: Request, res: Response) => {
+  serviceRepository.resetAllServicesToHealthy();
+  incidentRepository.clearActiveIncidents();
+  res.json({
+    message: 'All microservices restored to 100% healthy',
+    report: serviceRepository.getHealthReport(),
+  });
 });
 
 router.get('/:id', (req: Request, res: Response) => {

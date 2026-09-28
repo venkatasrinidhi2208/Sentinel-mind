@@ -59,6 +59,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  const healAllBtn = document.getElementById('healAllBtn');
+  if (healAllBtn) {
+    healAllBtn.addEventListener('click', async () => {
+      try {
+        const res = await fetch(`${API_BASE}/api/services/heal-all`, { method: 'POST' });
+        if (res.ok) {
+          fetchServices();
+          fetchIncidents();
+        }
+      } catch (err) {
+        console.error('Error healing services:', err);
+      }
+    });
+  }
+
   if (refreshBtn) {
     refreshBtn.addEventListener('click', () => {
       fetchServices();
