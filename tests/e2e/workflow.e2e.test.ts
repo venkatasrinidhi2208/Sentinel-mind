@@ -8,8 +8,9 @@
 import { chaosService } from '../../src/services/chaos.service';
 import { incidentService } from '../../src/services/incident.service';
 import { serviceRepository } from '../../src/services/serviceRepository';
+import { aiOrchestratorService } from '../../src/services/ai/aiOrchestrator';
 
-export function runE2ETests(): { passed: number; failed: number; errors: string[] } {
+export async function runE2ETests(): Promise<{ passed: number; failed: number; errors: string[] }> {
   let passed = 0;
   let failed = 0;
   const errors: string[] = [];
@@ -24,7 +25,10 @@ export function runE2ETests(): { passed: number; failed: number; errors: string[
     }
     passed++;
 
-    // 2. Verify Service Health Degradation
+    // 2. Await AI Multi-stage Orchestration & Hindsight Recall
+    await aiOrchestratorService.orchestrateIncidentAnalysis(incident);
+
+    // 3. Verify Service Health Degradation
     const service = serviceRepository.getServiceById('srv-postgres-cluster');
     if (service && (service.status === 'critical' || service.status === 'degraded')) {
       passed++;
@@ -33,8 +37,9 @@ export function runE2ETests(): { passed: number; failed: number; errors: string[
       errors.push('E2E Test Step 2 Failed: Microservice status was not degraded');
     }
 
-    // 3. Verify Remediation Action execution and recovery
-    const resolved = incidentService.executeRemediationAction(incident.id, 'act-pg-clean');
+    // 4. Verify Remediation Action execution and recovery
+    const actionId = incident.suggestedActions[0] ? incident.suggestedActions[0].id : 'act-pg-clean';
+    const resolved = incidentService.executeRemediationAction(incident.id, actionId);
     if (resolved && resolved.state === 'RESOLVED') {
       passed++;
     } else {
@@ -42,7 +47,7 @@ export function runE2ETests(): { passed: number; failed: number; errors: string[
       errors.push('E2E Test Step 3 Failed: Incident remediation execution failed');
     }
 
-    // 4. Verify Microservice is Healthy again
+    // 5. Verify Microservice is Healthy again
     const restoredService = serviceRepository.getServiceById('srv-postgres-cluster');
     if (restoredService && restoredService.status === 'healthy') {
       passed++;
