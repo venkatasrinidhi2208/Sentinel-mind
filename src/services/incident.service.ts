@@ -1,11 +1,13 @@
 /**
  * Core Incident Management Service
  * Developed by: Sri (Backend & Core Architecture)
+ * AI Integration by: Gowri (AI Engine & API Integration)
  */
 
-import { Incident, CreateIncidentDTO, RemediationAction } from '../models/incident.model';
+import { Incident, CreateIncidentDTO } from '../models/incident.model';
 import { incidentRepository } from './incidentRepository';
 import { serviceRepository } from './serviceRepository';
+import { aiOrchestratorService } from './ai/aiOrchestrator';
 
 export class IncidentService {
   public createIncident(dto: CreateIncidentDTO): Incident {
@@ -18,7 +20,6 @@ export class IncidentService {
       serviceRepository.updateService(service.id, {
         status: newStatus,
         healthScore: Math.max(10, service.healthScore - 40),
-        lastIncidentId: undefined, // Will be set once created
       });
     }
 
@@ -26,6 +27,11 @@ export class IncidentService {
     if (service) {
       serviceRepository.updateService(service.id, { lastIncidentId: incident.id });
     }
+
+    // Trigger Gowri's AI Multi-stage Orchestrator & Hindsight Memory Recall
+    aiOrchestratorService.orchestrateIncidentAnalysis(incident).catch((err) => {
+      console.error('[IncidentService] AI Orchestration error:', err);
+    });
 
     return incident;
   }
